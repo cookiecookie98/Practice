@@ -3,55 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate();
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'api_token' => Str::random(80),
+            'role_id' => 1
+        ]);
 
+        $token = $user->createToken(Str::random(80))->plainTextToken;
 
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return response($response,201);
     }
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required|min:8|max:32',
-        ]);
+
+        $user = User::where('email', $request->email)->first();
 
         $credentials = $request->only('email', 'password');
 
         if(!Auth::attempt($credentials)){
-            return response()->json(['message' => 'Unauthorized'],401);
+            return response()->json(['message' => 'Unauthorized']);
         }
 
-        $user = User::where('email', $request->email)->first();
-
-        $accessToken = $user->createToken('api_token')->plainTextToken;
-        $type = 'bearer';
-
         return response()->json([
-            'accessToken' => $accessToken,
-            'type' => $type
+            'access_token' => $user->createToken('api_token')->plainTextToken,
+            'type' => 'bearer',
         ]);
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->user()->currentAccessToken()->delete();
-        return response()->json('Logout successfully');
+        // $request->user()->currentAccessToken()->delete();
+        // return "Logout success";
+        return Auth::user();
     }
 
     public function getUserFromToken()
     {
-        $user = Auth::user();
-            return response()->json([
-                'name' => $user->name,
-                'email' => $user->email
-            ]);
+            // $user = Auth::user();
+            // return response()->json([
+            //     'name' => $user->name,
+            //     'email' => $user->email
+            // ]);
+        return Auth::user();
     }
 }

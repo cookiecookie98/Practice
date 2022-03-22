@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'api_token',
+        'role_id'
     ];
 
     /**
@@ -50,4 +52,8 @@ class User extends Authenticatable
     public function posts(){
         return $this->hasMany(Equipment::class);
     }
+
+    // public function isAdmin(){
+    //     return $this->id == 1 ? true : false;
+    // }
 }

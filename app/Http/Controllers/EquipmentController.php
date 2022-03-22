@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class EquipmentController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:create')->only('create');
+        // $this->middleware('can:update')->only('update');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +30,7 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        //
+        return "create";
     }
 
     /**

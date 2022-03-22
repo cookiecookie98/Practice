@@ -15,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        // 'App\Models\User' => 'App\Policies\EquipmentPolicy',
     ];
 
     /**
@@ -26,34 +26,41 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Gate::define('delete', function (User $user) {
-            if($user->role_id == 1)
-            {
-                return true;
-            }
-        });
-        Gate::define('create', function (User $user) {
-            if($user->role_id == 1)
-            {
-                return true;
-            }
-        });
-        Gate::define('edit', function (User $user) {
-            if($user->role_id == 1)
-            {
-                return true;
-            }
-        });
+        // Gate::before(function (User $user){
+        //     if($user->profiles->pluck('name')->contains('admin')){
+        //         return true;
+        //     }
+        // });
+        // Gate::define('delete', function (User $user) {
+        //     if($user->role_id == 1)
+        //     {
+        //         return true;
+        //     }
+        // });
 
-        Gate::define('view', function (User $user) {
-            if($user->role_id == 1 || $user->role_id == 2)
-            {
-                return true;
-            }
-        });
+        // Gate::define('create', function (User $user) {
+        //     if($user->role_id == 1)
+        //     {
+        //         return true;
+        //     }
+        // });
+
+        // Gate::define('edit', function (User $user) {
+        //     if($user->role_id == 1)
+        //     {
+        //         return true;
+        //     }
+        // });
+
+        // Gate::define('view', function (User $user) {
+        //     if($user->role_id == 1 || $user->role_id == 2)
+        //     {
+        //         return true;
+        //     }
+        // });
     }
 
-    // Gate::define('')
+
 
 
 }
