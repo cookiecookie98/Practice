@@ -9,19 +9,18 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 class Authenticate extends Middleware
 {
 
-    public function handle($request, Closure $next, ...$guards)
-    {
-        $guards = empty($guards) ? [null] : $guards;
+    // public function handle($request, Closure $next, ...$guards)
+    // {
+    //     $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (($guard === 'sanctum') && !Auth::guard($guard)->check()) {
-                // throw new AuthErrorException();
-                return abort(401);
-            }
-        }
+    //     foreach ($guards as $guard) {
+    //         if (($guard === 'management-api' || $guard === 'sanctum') && !Auth::guard($guard)->check()) {
+    //             throw new AuthErrorException();
+    //         }
+    //     }
 
-        return $next($request);
-    }
+    //     return $next($request);
+    // }
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *

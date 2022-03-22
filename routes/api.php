@@ -25,10 +25,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('auth')->group(function (){
     Route::post('/login', [UserController::class, 'login'])->name('login');
     Route::post('/register', [UserController::class, 'register'])->name('register');
-    Route::group(['middleware' => ['auth:sanctum']], function () {
-        Route::get('/logout',[UserController::class, 'logout'])->name('logout');
-        Route::get('/find',[UserController::class, 'getUserFromToken']);
-    });
+});
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/logout',[UserController::class, 'logout'])->name('logout');
+    Route::get('/find',[UserController::class, 'getUserFromToken']);
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

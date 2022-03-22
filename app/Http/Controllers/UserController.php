@@ -33,34 +33,35 @@ class UserController extends Controller
     public function login(Request $request)
     {
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email',$request->email)->first();
 
         $credentials = $request->only('email', 'password');
 
         if(!Auth::attempt($credentials)){
             return response()->json(['message' => 'Unauthorized']);
         }
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'access_token' => $user->createToken('api_token')->plainTextToken,
-            'type' => 'bearer',
-        ]);
+        return response()
+            ->json(['message' => 'Hi '.$user->name.', welcome to home','access_token' => $token, 'token_type' => 'Bearer', ]);
+
+        // return Auth::user();
+
+
+
     }
 
     public function logout(Request $request)
     {
-        // $request->user()->currentAccessToken()->delete();
-        // return "Logout success";
-        return Auth::user();
+        auth()->user()->tokens()->delete();
+
+        return [
+            'message' => 'You have successfully logged out and the token was successfully deleted'
+        ];
     }
 
     public function getUserFromToken()
     {
-            // $user = Auth::user();
-            // return response()->json([
-            //     'name' => $user->name,
-            //     'email' => $user->email
-            // ]);
-        return Auth::user();
+        return auth()->user();
     }
 }
